@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/database/storage_service.dart';
-import '../../../../core/models/bill.dart';
-import '../../../../core/models/cart_item.dart';
+import '../../../core/database/storage_service.dart';
+import '../../../core/models/bill.dart';
+import '../../../core/models/cart_item.dart';
 
 final checkoutProvider = StateNotifierProvider<CheckoutNotifier, CheckoutState>((ref) {
   return CheckoutNotifier();
