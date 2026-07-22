@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:pdf/pdf.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/bill.dart';
 import '../models/cart_item.dart';
@@ -11,7 +12,7 @@ class PdfService {
 
     pdf.addPage(
       pw.Page(
-        pageFormat: const pw.PageFormat(80 * 2.8346, double.infinity),
+        pageFormat: const PdfPageFormat(226.77, double.infinity),
         margin: const pw.EdgeInsets.symmetric(horizontal: 4 * 2.8346),
         build: (pw.Context context) {
           return pw.Column(
@@ -27,7 +28,7 @@ class PdfService {
                   style: const pw.TextStyle(fontSize: 10)),
               pw.Divider(),
               pw.Table(
-                border: pw.TableBorder.symmetric(inside: const pw.BorderSide(color: PdfColors.grey300, width: 0.3)),
+                border: pw.TableBorder.symmetric(inside: const pw.BorderSide(color: PdfColors.grey, width: 0.3)),
                 children: [
                   pw.TableRow(
                     children: [

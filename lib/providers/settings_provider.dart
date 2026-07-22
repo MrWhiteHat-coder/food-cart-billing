@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'menu_provider.dart';
+import '../services/storage_service.dart';
 
 final settingsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   final storage = await ref.watch(storageProvider.future);
