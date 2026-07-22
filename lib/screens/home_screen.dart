@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../../providers/menu_provider.dart';
+import '../../providers/settings_provider.dart';
 import '../../widgets/menu_item_card.dart';
 import '../../themes/app_theme.dart';
 import '../../models/menu_item.dart';
 import '../../models/category.dart';
+import '../../models/cart_item.dart';
 import '../../utils/currency_formatter.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {

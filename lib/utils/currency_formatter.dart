@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 class CurrencyFormatter {
-  static final NumberFormat _format = NumberFormat.simpleCurrency(
+  static final NumberFormat _format = NumberFormat.currency(
     symbol: '₹',
     decimalDigits: 0,
   );

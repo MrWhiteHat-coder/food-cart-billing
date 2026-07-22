@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
-import '../services/storage_service.dart';
+import 'menu_provider.dart';
 import '../models/bill.dart';
+import '../models/cart_item.dart';
 
 final billsProvider = FutureProvider<List<Bill>>((ref) async {
   final storage = await ref.watch(storageProvider.future);
@@ -43,3 +44,8 @@ class BillNotifier extends StateNotifier<AsyncValue<void>> {
     state = await AsyncValue.guard(() => _storage.updateBill(updated));
   }
 }
+
+final billNotifierProvider = StateNotifierProvider<BillNotifier, AsyncValue<void>>((ref) {
+  final storageAsync = ref.watch(storageProvider);
+  return BillNotifier(storageAsync.value!);
+});

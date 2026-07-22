@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../services/storage_service.dart';
+import 'menu_provider.dart';
 
 final settingsProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   final storage = await ref.watch(storageProvider.future);
@@ -27,5 +27,6 @@ class SettingsNotifier extends StateNotifier<AsyncValue<void>> {
 }
 
 final settingsNotifierProvider = StateNotifierProvider<SettingsNotifier, AsyncValue<void>>((ref) {
-  return SettingsNotifier(ref.watch(storageProvider).value!);
+  final storageAsync = ref.watch(storageProvider);
+  return SettingsNotifier(storageAsync.value!);
 });

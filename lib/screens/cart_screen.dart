@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../../providers/menu_provider.dart';
 import '../../themes/app_theme.dart';
 import '../../utils/currency_formatter.dart';

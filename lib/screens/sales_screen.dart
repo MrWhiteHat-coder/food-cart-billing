@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../providers/bill_provider.dart';
 import '../../themes/app_theme.dart';
 import '../../models/bill.dart';
+import '../../models/cart_item.dart';
 import '../../utils/currency_formatter.dart';
 
 class SalesScreen extends ConsumerWidget {
@@ -123,13 +126,16 @@ class SalesScreen extends ConsumerWidget {
             const SizedBox(height: 16),
             Text('Bill Details', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: AppTheme.textPrimary)),
             const SizedBox(height: 12),
-            ...bill.items.map((item) => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(child: Text('${item.name} x${item.quantity}', style: TextStyle(color: AppTheme.textPrimary, fontSize: 14))),
-                Text(CurrencyFormatter.format(item.lineTotal), style: const TextStyle(fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
-              ],
-            )),
+            ...bill.items.map((item) {
+              final cartItem = item as CartItem;
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(child: Text('${cartItem.name} x${cartItem.quantity}', style: TextStyle(color: AppTheme.textPrimary, fontSize: 14))),
+                  Text(CurrencyFormatter.format(cartItem.lineTotal), style: const TextStyle(fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
+                ],
+              );
+            }),
             const SizedBox(height: 12),
             Divider(color: AppTheme.border),
             _SummaryRow(label: 'Total', value: CurrencyFormatter.format(bill.total)),
@@ -173,7 +179,8 @@ class SalesScreen extends ConsumerWidget {
       final total = entry.value.fold(0.0, (sum, b) => sum + b.total);
       final count = entry.value.length;
       return MapEntry(entry.key, {'total': total, 'count': count});
-    }).toList()..sort((a, b) => DateFormat('dd MMM yyyy').parse(b.key).compareTo(DateFormat('dd MMM yyyy').parse(b.key)));
+    }).toList()
+      ..sort((a, b) => DateFormat('dd MMM yyyy').parse(a.key).compareTo(DateFormat('dd MMM yyyy').parse(b.key)));
 
     showDialog(
       context: context,
@@ -187,13 +194,14 @@ class SalesScreen extends ConsumerWidget {
             itemCount: report.length,
             itemBuilder: (context, index) {
               final entry = report[index];
+              final value = entry.value;
               return ListTile(
                 title: Text(entry.key, style: TextStyle(fontWeight: FontWeight.w600, color: AppTheme.textPrimary)),
                 trailing: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(CurrencyFormatter.format(entry['total'] as double), style: const TextStyle(fontWeight: FontWeight.w700, color: AppTheme.textPrimary)),
-                    Text('${entry['count']} bills', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+                    Text(CurrencyFormatter.format(value['total'] as double), style: const TextStyle(fontWeight: FontWeight.w700, color: AppTheme.textPrimary)),
+                    Text('${value['count']} bills', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
                   ],
                 ),
               );

@@ -1,11 +1,8 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
-import 'package:printing/printing.dart';
-import '../services/storage_service.dart';
 import '../models/bill.dart';
+import '../models/cart_item.dart';
 import '../utils/currency_formatter.dart';
 
 class PdfService {
@@ -14,8 +11,8 @@ class PdfService {
 
     pdf.addPage(
       pw.Page(
-        pageFormat: const pw.PageFormat(80 * pw.Point.mm, double.infinity),
-        margin: const pw.EdgeInsets.symmetric(horizontal: 4 * pw.Point.mm),
+        pageFormat: const pw.PageFormat(80 * 2.8346, double.infinity),
+        margin: const pw.EdgeInsets.symmetric(horizontal: 4 * 2.8346),
         build: (pw.Context context) {
           return pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.stretch,
@@ -30,7 +27,7 @@ class PdfService {
                   style: const pw.TextStyle(fontSize: 10)),
               pw.Divider(),
               pw.Table(
-                border: pw.TableBorder.symmetric(inside: const pw.BorderSide(color: PdfColors.grey, width: 0.3)),
+                border: pw.TableBorder.symmetric(inside: const pw.BorderSide(color: PdfColors.grey300, width: 0.3)),
                 children: [
                   pw.TableRow(
                     children: [
@@ -39,7 +36,7 @@ class PdfService {
                       pw.Padding(padding: const pw.EdgeInsets.symmetric(vertical: 2), child: pw.Text('Amt', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 9), textAlign: pw.TextAlign.right)),
                     ],
                   ),
-                  ...bill.items.map((item) {
+                  ...bill.items.map((CartItem item) {
                     return pw.TableRow(
                       children: [
                         pw.Padding(padding: const pw.EdgeInsets.symmetric(vertical: 2), child: pw.Text(item.name, style: const pw.TextStyle(fontSize: 9))),
