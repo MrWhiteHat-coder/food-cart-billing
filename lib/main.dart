@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'providers/menu_provider.dart';
-import 'providers/bill_provider.dart';
-import 'providers/settings_provider.dart';
-import 'screens/home_screen.dart';
-import 'screens/cart_screen.dart';
-import 'screens/sales_screen.dart';
-import 'screens/settings_screen.dart';
-import 'screens/checkout_screen.dart';
-import 'screens/menu_management_screen.dart';
-import 'themes/app_theme.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'core/theme/app_theme.dart';
+import 'core/utils/currency_formatter.dart';
+import 'core/utils/constants.dart';
+import 'features/pos/presentation/screens/home_screen.dart';
+import 'features/pos/presentation/widgets/cart_dock.dart';
+import 'features/pos/data/providers.dart';
+import 'features/reports/presentation/screens/reports_screen.dart';
+import 'features/menu_management/presentation/screens/menu_manage_screen.dart';
+import 'features/printer/presentation/screens/printer_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,21 +22,17 @@ class FoodCartApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settingsAsync = ref.watch(settingsProvider);
+    final settingsAsync = ref.watch(storageProvider);
 
     return MaterialApp(
-      title: 'FoodCart Billing',
+      title: AppConstants.appName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      initialRoute: '/home',
-      routes: {
-        '/home': (ctx) => const MainScreen(),
-        '/cart': (ctx) => const CartScreen(),
-        '/checkout': (ctx) => const CheckoutScreen(),
-        '/sales': (ctx) => const SalesScreen(),
-        '/settings': (ctx) => const SettingsScreen(),
-        '/menu': (ctx) => const MenuManageScreen(),
-      },
+      home: settingsAsync.when(
+        data: (_) => const MainScreen(),
+        loading: () => const Scaffold(body: Center(child: CircularProgressIndicator(color: AppTheme.primaryGreen))),
+        error: (e, st) => Scaffold(body: Center(child: Text('Error: $e', style: const TextStyle(color: AppTheme.errorRed)))),
+      ),
     );
   }
 }
@@ -51,37 +47,23 @@ class MainScreen extends ConsumerStatefulWidget {
 class _MainScreenState extends ConsumerState<MainScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    const HomeScreen(),
-    const SalesScreen(),
-    const SettingsScreen(),
+  final List<Widget> _screens = const [
+    HomeScreen(),
+    ReportsScreen(),
+    MenuManageScreen(),
+    PrinterScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.background,
+      backgroundColor: AppTheme.backgroundLightGrey,
       body: IndexedStack(index: _currentIndex, children: _screens),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _currentIndex == 0
-          ? Consumer(
-              builder: (context, ref, _) {
-                final cart = ref.watch(cartProvider);
-                final cartCount = cart.fold(0, (sum, item) => sum + item.quantity);
-                if (cartCount == 0) return const SizedBox.shrink();
-                return FloatingActionButton.extended(
-                  onPressed: () => Navigator.pushNamed(context, '/cart'),
-                  backgroundColor: AppTheme.primary,
-                  elevation: 4,
-                  icon: const Icon(Icons.shopping_bag_rounded, color: AppTheme.textPrimary),
-                  label: Text('$cartCount items', style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w700)),
-                );
-              },
-            )
-          : null,
+      floatingActionButton: _currentIndex == 0 ? const CartDock() : null,
       bottomNavigationBar: BottomAppBar(
         elevation: 8,
-        color: AppTheme.card,
+        color: AppTheme.cardWhite,
         shape: const CircularNotchedRectangle(),
         notchMargin: 8,
         child: Padding(
@@ -97,24 +79,22 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               ),
               _NavItem(
                 icon: Icons.bar_chart_rounded,
-                label: 'Sales',
+                label: 'Reports',
                 isSelected: _currentIndex == 1,
                 onTap: () => setState(() => _currentIndex = 1),
               ),
               const SizedBox(width: 40),
               _NavItem(
-                icon: Icons.settings_rounded,
-                label: 'Settings',
+                icon: Icons.inventory_2_rounded,
+                label: 'Menu',
                 isSelected: _currentIndex == 2,
                 onTap: () => setState(() => _currentIndex = 2),
               ),
               _NavItem(
-                icon: Icons.inventory_2_rounded,
-                label: 'Manage',
-                isSelected: false,
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const MenuManageScreen()));
-                },
+                icon: Icons.print_rounded,
+                label: 'Printer',
+                isSelected: _currentIndex == 3,
+                onTap: () => setState(() => _currentIndex = 3),
               ),
             ],
           ),
@@ -135,18 +115,21 @@ class _NavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: () {
+        HapticFeedback.lightImpact();
+        onTap();
+      },
       borderRadius: BorderRadius.circular(12),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         child: IconTheme(
-          data: IconThemeData(color: isSelected ? AppTheme.textPrimary : AppTheme.textTertiary, size: 24),
+          data: IconThemeData(color: isSelected ? AppTheme.primaryGreen : AppTheme.textTertiary, size: 24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon),
               const SizedBox(height: 4),
-              Text(label, style: TextStyle(fontSize: 11, fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500, color: isSelected ? AppTheme.textPrimary : AppTheme.textTertiary)),
+              Text(label, style: TextStyle(fontSize: 11, fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500, color: isSelected ? AppTheme.primaryGreen : AppTheme.textTertiary)),
             ],
           ),
         ),
