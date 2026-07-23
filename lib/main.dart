@@ -60,7 +60,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       backgroundColor: AppTheme.backgroundLightGrey,
       body: IndexedStack(index: _currentIndex, children: _screens),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _currentIndex == 0 ? const CartDock() : null,
+      floatingActionButton: _currentIndex == 0 ? CartDock() : null,
       bottomNavigationBar: BottomAppBar(
         elevation: 8,
         color: AppTheme.cardWhite,

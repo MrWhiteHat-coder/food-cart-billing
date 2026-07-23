@@ -7,7 +7,8 @@ import '../../../../core/database/storage_service.dart';
 import '../../../../core/models/bill.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/currency_formatter.dart';
-import '../data/providers.dart';
+import '../../../../features/pos/data/providers.dart';
+import '../../data/providers.dart';
 
 class ReportsScreen extends ConsumerWidget {
   const ReportsScreen({super.key});

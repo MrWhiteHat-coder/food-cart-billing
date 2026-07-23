@@ -1,3 +1,5 @@
+import 'cart_item.dart';
+
 class Bill {
   final String id;
   final List<CartItem> items;

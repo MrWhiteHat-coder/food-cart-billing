@@ -70,7 +70,12 @@ class PrinterNotifier extends StateNotifier<AsyncValue<void>> {
     try {
       final profile = await CapabilityProfile.load();
       final generator = Generator(PaperSize.mm80, profile);
-      final bytes = Uint8List.fromList(generator.text(shopName) + generator.hr() + generator.text('Bill ${bill.id.substring(0, 8)}' + generator.text('Total: ${bill.total.toString()}')));
+      final bytes = Uint8List.fromList(
+        generator.text(shopName) +
+            generator.hr() +
+            generator.text('Bill ${bill.id.substring(0, 8)}') +
+            generator.text('Total: ${bill.total.toString()}'),
+      );
       final services = await _connectedDevice!.discoverServices();
       for (final service in services) {
         for (final char in service.characteristics) {

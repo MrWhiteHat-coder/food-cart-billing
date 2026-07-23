@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../../../core/models/menu_item.dart';
@@ -12,11 +13,11 @@ class MenuItemCard extends ConsumerWidget {
   final MenuItem item;
   final List<CartItem> cartItems;
 
-  const MenuItemCard({
-    super.key,
+  MenuItemCard({
+    Key? key,
     required this.item,
     required this.cartItems,
-  });
+  }) : super(key: key);
 
   int get cartQty {
     final ci = cartItems.firstWhere((c) => c.menuItemId == item.id, orElse: () => CartItem(id: '', menuItemId: '', name: '', price: 0, quantity: 0, gstRate: 0));

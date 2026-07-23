@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../data/providers.dart';
+import '../widgets/quantity_stepper.dart';
+import '../../checkout/presentation/widgets/checkout_sheet.dart';
 
 class CartDock extends ConsumerWidget {
-  const CartDock({super.key});
+  const CartDock({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -104,7 +107,7 @@ class CartDock extends ConsumerWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (ctx) => const CheckoutSheet(),
+      builder: (ctx) => CheckoutSheet(),
     );
   }
 }

@@ -5,7 +5,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/currency_formatter.dart';
 import '../../../../core/models/category.dart';
 import '../../../../core/models/menu_item.dart';
-import '../../data/providers.dart';
+import '../../../../features/pos/data/providers.dart';
 
 class MenuManageScreen extends ConsumerWidget {
   const MenuManageScreen({super.key});

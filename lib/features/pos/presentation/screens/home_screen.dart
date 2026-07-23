@@ -6,7 +6,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../data/providers.dart';
 import '../../../../core/models/menu_item.dart';
 import '../widgets/menu_item_card.dart';
-import '../widgets/category_chips.dart';
+import '../widgets/category_chip.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});

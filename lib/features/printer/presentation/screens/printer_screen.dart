@@ -92,7 +92,7 @@ class PrinterScreen extends ConsumerWidget {
                             HapticFeedback.lightImpact();
                             ref.read(printerProvider.notifier).stopScan();
                           },
-                    style: ElevatedButton(backgroundColor: AppTheme.vibrantYellow, foregroundColor: AppTheme.textPrimary).copyWith(elevation: const WidgetStatePropertyAll(0)),
+                    style: ElevatedButton.styleFrom(backgroundColor: AppTheme.vibrantYellow, foregroundColor: AppTheme.textPrimary, elevation: 0, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
                     icon: const Icon(Icons.stop_rounded),
                     label: const Text('Stop'),
                   ),
