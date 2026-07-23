@@ -13,8 +13,6 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   intl: ^0.18.1
-  pdf: ^3.8.4
-  printing: ^5.11.1
   share_plus: ^7.2.1
   google_fonts: ^6.1.0
   flutter_slidable: ^3.0.1
